@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"
+        integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+        integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body ng-controller="myCtrl">
+    <div class="container">
+
+        <!-- HIỂN THỊ -->
+        <div class="modal" id="myModal3">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Chi tiết sản phẩm</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="container">
+                            <form method="post" ng-submit="onSubmit($event)">
+                                <label for="">Name:</label>
+                                <input type="text" value="{{productHT.productName}}" class="form-control">
+
+                                <label for="">Color:</label>
+                                <input type="text" value="{{productHT.color}}" class="form-control">
+
+                                <label for="">Quantity:</label>
+                                <input type="text" value="{{productHT.quantity}}" class="form-control">
+
+                                <label for="">Sell price:</label>
+                                <input type="text" value="{{productHT.sellPrice}}" class="form-control">
+
+                                <label for="">Origin price:</label>
+                                <input type="text" value="{{productHT.originPrice}}" class="form-control">
+
+                                <div style="margin: 10px 0px 10px;">
+                                    <label for="">Brand</label>
+                                    <select class="form-select">
+                                        <option>{{productHT.product_Brand[0].brandName}}</option>
+                                    </select>
+                                </div>
+
+                                <label for="">Category</label>
+                                <!-- <select class="form-select">
+                        <option ng-repeat="x in listCT" value="{{x}}">{{x.cateName}}</option>
+                    </select> -->
+                                <select class="form-select">
+                                    <option>{{productHT.subCategory.subCateName}}</option>
+                                </select>
+
+                                <div style="margin: 10px 0px 10px;">
+                                    <label for="">Status</label>
+                                    <select class="form-select">
+                                        <option>{{productHT.status.statusName}}</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- HIỂN THỊ /-->
+
+        <!-- THÊM -->
+        <div class="modal" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thêm Sản phẩm</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="container">
+                            <form method="post" ng-submit="add($event)">
+                                <label for="">Name:</label>
+                                <input type="text" ng-model="product.productName" class="form-control">
+
+                                <label for="">Color:</label>
+                                <input type="text" ng-model="product.color" class="form-control">
+
+                                <label for="">Quantity:</label>
+                                <input type="text" ng-model="product.quantity" class="form-control">
+
+                                <label for="">Sell price:</label>
+                                <input type="text" ng-model="product.sellPrice" class="form-control">
+
+                                <label for="">Origin price:</label>
+                                <input type="text" ng-model="product.originPrice" class="form-control">
+
+                                <div style="margin: 10px 0px 10px;">
+                                    <label for="">Brand</label>
+                                    <select ng-model="product.product_Brand[0]" ng-options="x.brandName for x in listBR"
+                                        value={{x}} class="form-select">
+                                    </select>
+                                </div>
+
+                                <label for="">Category</label>
+                                <select ng-change="onChange(idCTadd)" ng-model="idCTadd"
+                                    ng-options="x.id as x.cateName for x in listCT">
+                                </select>
+                                <select ng-model="product.subCategory"
+                                    ng-options="x as x.subCateName for x in listSCTbyId">
+                                </select>
+                                <div style="margin: 10px 0px 10px;">
+                                    <label for="">Status</label>
+                                    <select ng-model="product.status" ng-options="x.statusName for x in listST"
+                                        value={{x}} class="form-select">
+                                    </select>
+                                </div>
+                                <button class="btn btn-success" type="submit">Save</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- THÊM /-->
+
+
+        <!-- Cập nhật -->
+
+        <div class="modal" id="myModal2">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Cập nhật sản phẩm</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="container">
+                            <form name="form" method="post" ng-submit="update($event)">
+                                <label for="">Name:</label>
+                                <input type="text" name="txtName" value="{{productHT.productName}}"
+                                    ng-model="productHT.productName" class="form-control" required>
+                                <small style="color: red; font-style: italic;"
+                                    ng-show="form.txtName.$touched && form.txtName.$invalid">Không được để trống
+                                    tên sản phẩm <br></small>
+                                <label for="">Color:</label>
+                                <input type="text" name="txtColor" value="{{productHT.color}}"
+                                    ng-model="productHT.color" class="form-control" required>
+                                <small style="color: red; font-style: italic;"
+                                    ng-show="form.txtColor.$touched && form.txtColor.$invalid">Không được để trống
+                                    màu sắc sản phẩm <br></small>
+
+                                <label for="">Quantity:</label>
+                                <input type="number" min="1" name="txtQuantity" value="{{productHT.quantity}}"
+                                    ng-model="productHT.quantity" class="form-control" required>
+                                <small style="color: red; font-style: italic;"
+                                    ng-show="form.txtQuantity.$touched && form.txtQuantity.$invalid">Số lượng phải là số
+                                    dương và không được trống<br></small>
+
+                                <label for="">Sell price:</label>
+                                <input type="number" min="1" name="txtSell" value="{{productHT.sellPrice}}"
+                                    ng-model="productHT.sellPrice" class="form-control" required>
+                                <small style="color: red; font-style: italic;"
+                                    ng-show="form.txtSell.$touched && form.txtSell.$invalid">Giá bán phải là số dương và
+                                    không được trống<br></small>
+
+                                <label for="">Origin price:</label>
+                                <input type="number" min="1" name="txtOrigin" value="{{productHT.originPrice}}"
+                                    ng-model="productHT.originPrice" class="form-control" required>
+                                <small style="color: red; font-style: italic;"
+                                    ng-show="form.txtOrigin.$touched && form.txtOrigin.$invalid">Giá bán phải là số
+                                    dương và không được trống</small>
+
+                                <div style="margin: 10px 0px 10px;">
+                                    <label for="">Brand</label>
+                                    <select ng-click="onClick()" ng-model="idBRdt"
+                                        ng-options="x.id as x.brandName for x in listBR" class="form-select">
+                                    </select>
+                                </div>
+
+                                <label for="">Category</label>
+                                <select ng-change="onChange(idCTdt)" ng-model="idCTdt"
+                                    ng-options="x.id as x.cateName for x in listCT">
+                                </select>
+                                <select ng-model="productHT.subCategory.id"
+                                    ng-options="x.id as x.subCateName for x in listSCTbyId">
+                                </select>
+                                <div style="margin: 10px 0px 10px;">
+                                    <label for="">Status</label>
+                                    <select ng-model="productHT.status.id" ng-options="x.id as x.statusName for x in listST" class="form-select">
+                                    </select>
+                                </div>
+                                <button class="btn btn-success" type="submit">Update</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Cập nhật /-->
+
+        <h1 style="text-align: center;">Quản lý sản phẩm</h1>
+        <form>
+            <label for="">Name:</label>
+            <input type="text" class="form-control">
+            <label for="">Price:</label>
+            <input type="text" class="form-control">
+            <br> <br>
+
+            <label for="">Brand</label>
+            <select>
+                <option ng-repeat="x in listBR" value="{{x}}">{{x.brandName}}</option>
+            </select> &nbsp; &nbsp;
+
+            <label for="">Category</label>
+            <select ng-change="onChange(idCT)" ng-model="idCT"
+            ng-options="x.id as x.cateName for x in listCT">
+            </select> &nbsp; &nbsp;
+            <select ng-model="product.subCategory.subCateName" ng-options="x as x.subCateName for x in listSCTbyId">
+            </select> &nbsp; &nbsp;
+
+            <label for="">Status</label>
+            <select>
+                <option ng-repeat="x in listST" value="{{x}}">{{x.statusName}}</option>
+            </select> &nbsp; &nbsp; <br> <br>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                Add product
+            </button> &nbsp; &nbsp;
+            <label for="">Search:</label>
+            <input type="text">
+            <td><button class="btn btn-success">Search</button></td>
+            <br> <br>
+        </form>
+        <table class="table table-hover">
+            <thead>
+                <th>STT</th>
+                <th>Tên</th>
+                <th>Hãng</th>
+                <th>CT Danh Mục</th>
+                <th>Giá</th>
+                <th>Trạng thái</th>
+                <th colspan="3">Hành động</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in listPR">
+                    <td>{{$index+1}}</td>
+                    <td>{{x.productName}}</td>
+                    <td>{{x.product_Brand[0].brandName}}</td>
+                    <td>{{x.subCategory.subCateName}}</td>
+                    <td>{{x.sellPrice}}</td>
+                    <td>{{x.status.statusName}}</td>
+                    <td>
+                        <button ng-click="detail($index)" class="btn btn-info" data-bs-toggle="modal"
+                            data-bs-target="#myModal3">
+                            <i class="fa-solid fa-eye"></i> </button>
+                        <button ng-click="detail($index)" class="btn btn-warning" data-bs-toggle="modal"
+                            data-bs-target="#myModal2">
+                            <i class="fa fa-pencil"></i> </button>
+                        <button class="btn btn-danger" ng-click="delete($index)"><i class="fa fa-trash"
+                                aria-hidden="true"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <script src="controller/index.js"></script>
+</body>
+
+</html>
